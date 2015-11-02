@@ -1,0 +1,112 @@
+html, body, .heighty{
+  height: 100%;
+}
+
+.my-container {
+  min-height: 100%;
+  height: 100%;
+  position: relative;
+}
+
+@font-face{
+  font-family: "indie-font";
+  src: url("/fonts/ruba-webfont.ttf")
+}
+
+.outer-image{
+  height: 100%;
+}
+
+img.bg {
+  /* Set rules to fill background */
+  min-height: 100%;
+
+  /* Set up proportionate scaling */
+  width: auto;
+  height: 100%;
+
+  /* Set up positioning */
+  top: 0;
+  position:absolute;
+  z-index: 1;
+}
+
+.button-buddy {
+  margin: 0px 5px 0px ;
+  cursor: pointer;
+}
+
+.toggle-buddy{
+  cursor: pointer;
+  font-family: indie-font;
+  color: rgb(15, 15, 15);
+  font-size: 24px;
+  margin-bottom: 5px;
+  padding-bottom: 3px;
+  padding-left: 6px;
+  padding-right: 6px;
+  padding-top: 2px;
+  text-align: center;
+  text-indent: 0px;
+  text-rendering: auto;
+  text-shadow: none;
+  text-transform: none;
+  word-spacing: 0px;
+  border-color: rgb(15, 15, 15);
+  border-style: outset;
+  border-bottom-width: 2px;
+  border-left-width: 1px;
+  border-right-width: 1px;
+  border-top-width: 2px;
+}
+.right-end{
+  -webkit-border-top-right-radius: 8px;
+  -moz-border-top-right-radius: 8px;
+  border-top-right-radius: 8px;
+  -webkit-border-bottom-right-radius: 8px;
+  -moz-border-bottom-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.left-end{
+  -webkit-border-top-left-radius: 8px;
+  -moz-border-top-left-radius: 8px;
+  border-top-left-radius: 8px;
+  -webkit-border-bottom-left-radius: 8px;
+  -moz-border-bottom-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+/* TOOLBOX stuff */
+
+.toolbox {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  position: absolute;
+}
+
+.clickable {
+  pointer-events: auto;
+}
+
+.click-thru {
+  pointer-events: none;
+}
+
+.shadow-right {
+  -webkit-box-shadow: inset 7px 0 9px -7px rgba(0,0,0,0.8);
+  -moz-box-shadow: inset 7px 0 9px -7px rgba(0,0,0,0.8);
+  box-shadow: inset 7px 0 9px -7px rgba(0,0,0,0.8);
+}
+
+.shadow-left {
+  -webkit-box-shadow: inset -7px 0 9px -7px rgba(0,0,0,0.8);
+  -moz-box-shadow: inset -7px 0 9px -7px rgba(0,0,0,0.8);
+  box-shadow: inset -7px 0 9px -7px rgba(0,0,0,0.8);
+}
+
+
