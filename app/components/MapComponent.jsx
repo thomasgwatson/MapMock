@@ -1,6 +1,7 @@
 const React = require('react')
 const L = require('leaflet')
 const MapTools = require('./MapTools')
+const MapFooter = require('./MapFooter')
 
 const MapComponent = React.createClass({
   getDefaultProps: function () {
@@ -75,24 +76,41 @@ const MapComponent = React.createClass({
     this.props.transitionTo('/', getParams, getQuery)
   },
   render: function () {
+    var viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
+
     var mapStyling = {
       left: 0,
       top: 0,
-      bottom: 0,
       right: 0,
       position: 'absolute',
       overflow: 'hidden',
       zIndex: 2,
       width: '100%',
-      height: '100%',
+      height: viewportHeight - 80,
+    }
+
+    var MapFooterStyling = {
+      left: 0,
+      bottom: 0,
+      right: 0,
+      position: 'absolute',
+      overflow: 'hidden',
+      zIndex: 3,
+      width: '100%',
+      height: 80,
+      backgroundColor: this.props.theme.secondary,
     }
 
     return (
-      <div className='container'>
+      <div className='my-container'>
         <div ref='leafletTarget' id='map' style={mapStyling}>
           <MapTools map={this.map}
-                  mapStyling={mapStyling} />
+                    theme={this.props.theme}
+                    mapStyling={mapStyling} />
         </div>
+        <MapFooter map={this.map}
+               theme={this.props.theme}
+               componentStyling={MapFooterStyling}/>
       </div>
       )
   },

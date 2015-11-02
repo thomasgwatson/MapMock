@@ -17,23 +17,21 @@ html, body, .heighty{
   height: 100%;
 }
 
-img.bg {
-  /* Set rules to fill background */
-  min-height: 100%;
-
-  /* Set up proportionate scaling */
-  width: auto;
-  height: 100%;
-
-  /* Set up positioning */
-  top: 0;
-  position:absolute;
-  z-index: 1;
+.map-footer{
+  box-shadow: 0px -1px 7px 0px rgba(0,0,0,0.50);
 }
 
 .button-buddy {
-  margin: 0px 5px 0px ;
   cursor: pointer;
+  box-shadow: 4px 2px 4px 0px rgba(0,0,0,0.50);
+  border-radius: 8px;
+  height: 50px;
+  width: 46px;
+  border: 0;
+}
+
+.button-group-buddy:nth-child(n+1){
+  border-top: 1px solid #7E7E7E;
 }
 
 .toggle-buddy{

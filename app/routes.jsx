@@ -22,8 +22,10 @@ var mapHandler = React.createClass({
     return {}
   },
   render: function () {
+    var theme = {primary: '#fff', secondary: '#474C57'}
+
     return (
-      <MapComponent transitionTo={this.transitionTo} />
+      <MapComponent transitionTo={this.transitionTo} theme={theme} />
     )
   },
 })
