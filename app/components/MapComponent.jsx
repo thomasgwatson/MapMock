@@ -15,6 +15,7 @@ const MapComponent = React.createClass({
   },
   getInitialState: function () {
     return {
+      activeStep: 'first',
     }
   },
   componentWillReceiveProps: function (nextProps) {
@@ -79,9 +80,30 @@ const MapComponent = React.createClass({
 
     this.map.addControl(this.drawControl)
     this.map.addLayer(this.backgroundTiles)
+    this.map.addLayer(this.estimateLayer)
 
     this.map.on('zoomend', this.updateZoom)
     this.map.on('moveend', this.updateCenter)
+    this.map.on('draw:created', this.objectDrawn)
+  },
+  objectDrawn: function (evt) {
+    const layer = evt.layer
+    // need to make these geometries interactive
+
+    this.estimateLayer.addLayer(layer)
+
+    layer.on('click', function () {
+      if (!layer.selected) {
+        layer.closePopup()
+      }
+
+      this.estimateLayer.eachLayer(function (layer) {
+        layer.selected = false
+        layer.editing.disable()
+      })
+      layer.editing.enable()
+      layer.selected = true
+    }, this)
   },
   updateCenter: function (evt) {
     if (evt) {
@@ -99,6 +121,7 @@ const MapComponent = React.createClass({
       zoom: options.zoom || Math.round(this.map.getZoom()),
       lat: options.lat || this.map.getCenter().lat,
       lng: options.lng || this.map.getCenter().lng,
+      step: options.step || this.props.activeStep,
     }
 
     this.props.transitionTo('/', getParams, getQuery)
@@ -136,8 +159,9 @@ const MapComponent = React.createClass({
                     mapStyling={mapStyling} />
         </div>
         <MapFooter map={this.map}
-               theme={this.props.theme}
-               componentStyling={MapFooterStyling}/>
+                   activeStep={this.props.activeStep}
+                   theme={this.props.theme}
+                   componentStyling={MapFooterStyling}/>
       </div>
       )
   },
