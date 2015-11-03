@@ -7,6 +7,7 @@ require('expose?$!expose?jQuery!jquery')
 require('bootstrap-webpack')
 require('./normalize.css')
 require('../node_modules/leaflet/dist/leaflet.css')
+require('../node_modules/leaflet-draw/dist/leaflet.draw.css')
 require('./main.css')
 
 // routing and friends

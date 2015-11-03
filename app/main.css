@@ -17,6 +17,11 @@ html, body, .heighty{
   height: 100%;
 }
 
+svg {
+  display: block;
+  margin: auto;
+}
+
 .map-footer{
   box-shadow: 0px -1px 7px 0px rgba(0,0,0,0.50);
 }
@@ -30,50 +35,13 @@ html, body, .heighty{
   border: 0;
 }
 
-.button-group-buddy:nth-child(n+1){
-  border-top: 1px solid #7E7E7E;
+.button-group-buddy:nth-child(n+2){
+  border-top: 1px solid #ccc;
 }
 
-.toggle-buddy{
-  cursor: pointer;
-  font-family: indie-font;
-  color: rgb(15, 15, 15);
-  font-size: 24px;
-  margin-bottom: 5px;
-  padding-bottom: 3px;
-  padding-left: 6px;
-  padding-right: 6px;
-  padding-top: 2px;
-  text-align: center;
-  text-indent: 0px;
-  text-rendering: auto;
-  text-shadow: none;
-  text-transform: none;
-  word-spacing: 0px;
-  border-color: rgb(15, 15, 15);
-  border-style: outset;
-  border-bottom-width: 2px;
-  border-left-width: 1px;
-  border-right-width: 1px;
-  border-top-width: 2px;
-}
-.right-end{
-  -webkit-border-top-right-radius: 8px;
-  -moz-border-top-right-radius: 8px;
-  border-top-right-radius: 8px;
-  -webkit-border-bottom-right-radius: 8px;
-  -moz-border-bottom-right-radius: 8px;
-  border-bottom-right-radius: 8px;
-}
-
-.left-end{
-  -webkit-border-top-left-radius: 8px;
-  -moz-border-top-left-radius: 8px;
-  border-top-left-radius: 8px;
-  -webkit-border-bottom-left-radius: 8px;
-  -moz-border-bottom-left-radius: 8px;
-  border-bottom-left-radius: 8px;
-}
+.button-buddy button:hover {
+  background-color: #a4a4a4;
+  }
 
 /* TOOLBOX stuff */
 
@@ -95,16 +63,88 @@ html, body, .heighty{
   pointer-events: none;
 }
 
-.shadow-right {
-  -webkit-box-shadow: inset 7px 0 9px -7px rgba(0,0,0,0.8);
-  -moz-box-shadow: inset 7px 0 9px -7px rgba(0,0,0,0.8);
-  box-shadow: inset 7px 0 9px -7px rgba(0,0,0,0.8);
+/* Styling Draw tools madness */
+
+.leaflet-draw-toolbar a {
+  background-image: url('./public/images/spritesheet-2x_white.png');
+  background-repeat: no-repeat;
 }
 
-.shadow-left {
-  -webkit-box-shadow: inset -7px 0 9px -7px rgba(0,0,0,0.8);
-  -moz-box-shadow: inset -7px 0 9px -7px rgba(0,0,0,0.8);
-  box-shadow: inset -7px 0 9px -7px rgba(0,0,0,0.8);
+.leaflet-retina .leaflet-draw-toolbar a {
+  background-image: url('./public/images/spritesheet-2x.png');
+  background-size: 270px 30px;
 }
 
+.leaflet-bar{
+  box-shadow: 4px 2px 4px 0px rgba(0,0,0,0.50);
+  border-radius: 8px;
+}
 
+.leaflet-top{
+  top: 120px;
+  right: 2px;
+}
+
+.leaflet-bar a,
+.leaflet-bar a:hover {
+  border-bottom: 1px solid #ccc;
+  width: 40px;
+  height: 48px;
+  line-height: 26px;
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  color: #FFFFFF;
+  background-color: #474C57;
+  background-size: 500px;
+  }
+.leaflet-bar a,
+.leaflet-control-layers-toggle {
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  display: block;
+  }
+.leaflet-bar a:hover {
+  background-color: #a4a4a4;
+  }
+.leaflet-bar a:first-child {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  }
+.leaflet-bar a:last-child {
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  border-bottom: none;
+  }
+.leaflet-bar a.leaflet-disabled {
+  cursor: default;
+  background-color: #a4a4a4;
+  color: #bbb;
+  }
+
+  /* ================================================================== */
+/* Draw toolbar
+/* ================================================================== */
+
+.leaflet-draw-toolbar .leaflet-draw-draw-polyline {
+  background-position: 7px 10px;
+}
+
+.leaflet-draw-toolbar .leaflet-draw-draw-polygon {
+  background-position: -50px 10px;
+}
+
+.leaflet-draw-toolbar .leaflet-draw-draw-rectangle {
+  background-position: -111px 10px;
+}
+
+/* FOOTER stuff */
+
+.text-left{
+  text-align: left;
+}
+
+.constrain-padding{
+  padding-left: 5;
+  padding-right: 5;
+}

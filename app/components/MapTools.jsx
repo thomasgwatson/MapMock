@@ -23,7 +23,7 @@ var MapTools = React.createClass({
     }
 
     return (
-        <div className='toolbox click-thru' style={this.props.mapStyling}>
+        <div className='toolbox click-thru' style={Object.assign(this.props.mapStyling, {width: '100%'})}>
           <div className='toolbox btn-group-vertical btn-group-sm clickable ' role='group' id='zoom-buttons' style={{top: 16, right: 12, position: 'absolute', cursor: 'pointer'}}>
             <button onClick={this.handleZoomInClick} className='btn btn-default button-buddy button-group-buddy' type='button' style={buttonStyling} ><span className='glyphicon glyphicon-plus'></span></button>
             <button onClick={this.handleZoomOutClick} className='btn btn-default button-buddy button-group-buddy' type='button' style={buttonStyling} ><span className='glyphicon glyphicon-minus'></span></button>
@@ -41,3 +41,9 @@ var MapTools = React.createClass({
 })
 
 module.exports = MapTools
+
+          // <div className='toolbox btn-group-vertical btn-group-sm clickable ' role='group' id='' style={{top: 130, right: 12, position: 'absolute', cursor: 'pointer'}}>
+          //   <button onClick={this.handleZoomInClick} className='btn btn-default button-buddy button-group-buddy' type='button' style={buttonStyling} ><span className='glyphicon glyphicon-plus'></span></button>
+          //   <button onClick={this.handleZoomOutClick} className='btn btn-default button-buddy button-group-buddy' type='button' style={buttonStyling} ><span className='glyphicon glyphicon-minus'></span></button>
+          //   <button onClick={this.handleZoomOutClick} className='btn btn-default button-buddy button-group-buddy' type='button' style={buttonStyling} ><span className='glyphicon glyphicon-minus'></span></button>
+          // </div>

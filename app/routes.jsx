@@ -22,7 +22,7 @@ var mapHandler = React.createClass({
     return {}
   },
   render: function () {
-    var theme = {primary: '#fff', secondary: '#474C57'}
+    var theme = {primary: '#fff', secondary: '#474C57', accent1: '#F5A623', accent2: '#8C8C8C'}
 
     return (
       <MapComponent transitionTo={this.transitionTo} theme={theme} />

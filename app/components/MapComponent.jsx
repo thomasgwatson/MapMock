@@ -1,5 +1,6 @@
 const React = require('react')
 const L = require('leaflet')
+require('leaflet-draw')
 const MapTools = require('./MapTools')
 const MapFooter = require('./MapFooter')
 
@@ -22,11 +23,38 @@ const MapComponent = React.createClass({
     }
   },
   componentDidMount: function () {
-    var me = this
+    this.estimateLayer = new L.FeatureGroup()
+    this.drawControl = new L.Control.Draw({
+      position: 'topright',
+      draw: {
+        polyline: {
+          shapeOptions: {
+            color: '#ff3333',
+          },
+        },
+        polygon: {
+          shapeOptions: {
+            color: '#ff3333',
+          },
+        },
+        circle: false,
+        rectangle: {
+          shapeOptions: {
+            color: '#ff3333',
+          },
+        },
+        marker: false,
+      },
+      edit: {
+        featureGroup: this.estimateLayer,
+        edit: false,
+        remove: false,
+      },
+    })
 
     if ('geolocation' in navigator && this.props.seekPosition) {
-      navigator.geolocation.getCurrentPosition(function (position) {
-        me.map.setView(new L.LatLng(position.coords.latitude, position.coords.longitude), me.props.zoom)
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.map.setView(new L.LatLng(position.coords.latitude, position.coords.longitude), this.props.zoom)
       })
     }
 
@@ -43,13 +71,13 @@ const MapComponent = React.createClass({
       markerZoomAnimation: false,
       fadeAnimation: false,
       boxZoom: true,
-    }
-    )
+    })
 
     this.backgroundTiles = L.tileLayer('https://{s}.tiles.mapbox.com/v3/tokugawa.nbp98oi4/{z}/{x}/{y}.png', {
       attribution: '<a href="https://www.linkedin.com/in/thomasgwatson" target="_blank"> Civil-Tom </a>| <a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>',
     }) // Mapbox map tiles
 
+    this.map.addControl(this.drawControl)
     this.map.addLayer(this.backgroundTiles)
 
     this.map.on('zoomend', this.updateZoom)
@@ -81,7 +109,6 @@ const MapComponent = React.createClass({
     var mapStyling = {
       left: 0,
       top: 0,
-      right: 0,
       position: 'absolute',
       overflow: 'hidden',
       zIndex: 2,
