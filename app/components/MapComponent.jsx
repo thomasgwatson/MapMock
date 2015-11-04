@@ -3,6 +3,7 @@ const L = require('leaflet')
 require('leaflet-draw')
 const MapTools = require('./MapTools')
 const MapFooter = require('./MapFooter')
+const FeatureSelector = require('./FeatureSelector')
 
 const MapComponent = React.createClass({
   getDefaultProps: function () {
@@ -16,6 +17,7 @@ const MapComponent = React.createClass({
   getInitialState: function () {
     return {
       activeStep: 'first',
+      surveryPreferences: [],
     }
   },
   componentWillReceiveProps: function (nextProps) {
@@ -30,18 +32,18 @@ const MapComponent = React.createClass({
       draw: {
         polyline: {
           shapeOptions: {
-            color: '#ff3333',
+            color: '#AC0000',
           },
         },
         polygon: {
           shapeOptions: {
-            color: '#ff3333',
+            color: '#AC0000',
           },
         },
         circle: false,
         rectangle: {
           shapeOptions: {
-            color: '#ff3333',
+            color: '#AC0000',
           },
         },
         marker: false,
@@ -104,6 +106,10 @@ const MapComponent = React.createClass({
       layer.editing.enable()
       layer.selected = true
     }, this)
+    this.updateStep('second')
+  },
+  updateStep: function (step) {
+    this.updateURL({step: step})
   },
   updateCenter: function (evt) {
     if (evt) {
@@ -126,10 +132,28 @@ const MapComponent = React.createClass({
 
     this.props.transitionTo('/', getParams, getQuery)
   },
-  render: function () {
-    var viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
+  renderFeatureSelector: function (viewportHeight) {
+    return <FeatureSelector {...this.props} viewportHeight={viewportHeight} />
+  },
+  renderEstimatePage: function (viewportHeight) {
+    const EstimatePageStyling = {
+      right: 0,
+      top: 0,
+      position: 'absolute',
+      overflow: 'hidden',
+      zIndex: 3,
+      width: '50%',
+      height: viewportHeight - 80,
+      backgroundColor: this.props.theme.secondary,
+    }
 
-    var mapStyling = {
+    return <div style={EstimatePageStyling}></div>
+  },
+  render: function () {
+    let interactionPanel
+    const viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
+
+    const mapStyling = {
       left: 0,
       top: 0,
       position: 'absolute',
@@ -139,16 +163,25 @@ const MapComponent = React.createClass({
       height: viewportHeight - 80,
     }
 
-    var MapFooterStyling = {
+    const MapFooterStyling = {
       left: 0,
       bottom: 0,
       right: 0,
       position: 'absolute',
       overflow: 'hidden',
-      zIndex: 3,
+      zIndex: 4,
       width: '100%',
       height: 80,
       backgroundColor: this.props.theme.secondary,
+    }
+
+    if (this.props.activeStep === 'second') interactionPanel = this.renderFeatureSelector(viewportHeight)
+    if (this.props.activeStep === 'fourth') interactionPanel = this.renderEstimatePage(viewportHeight)
+    if (this.props.activeStep === 'second' || this.props.activeStep === 'fourth') {
+      mapStyling.width = '50%'
+      this.map.invalidateSize()
+      const fitToBounds = this.estimateLayer.getBounds()
+      this.map.panTo(fitToBounds.getCenter())
     }
 
     return (
@@ -158,6 +191,7 @@ const MapComponent = React.createClass({
                     theme={this.props.theme}
                     mapStyling={mapStyling} />
         </div>
+        {interactionPanel}
         <MapFooter map={this.map}
                    activeStep={this.props.activeStep}
                    theme={this.props.theme}
