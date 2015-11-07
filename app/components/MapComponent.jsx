@@ -25,6 +25,14 @@ const MapComponent = React.createClass({
     if (nextProps.lat !== this.props.lat || nextProps.lng !== this.props.lng || nextProps.zoom !== this.props.zoom) {
       this.map.setView(new L.LatLng(nextProps.lat, nextProps.lng), nextProps.zoom)
     }
+
+    if (nextProps.activeStep === 'second' || nextProps.activeStep === 'fourth') {
+      setTimeout(() => {
+        this.map.invalidateSize()
+        const fitToBounds = this.estimateLayer.getBounds()
+        this.map.panTo(fitToBounds.getCenter())
+      }, 100)
+    }
   },
   componentDidMount: function () {
     this.estimateLayer = new L.FeatureGroup()
@@ -65,7 +73,7 @@ const MapComponent = React.createClass({
     var lat = this.props.lat
     var lng = this.props.lng
 
-    this.map = new L.Map(this.refs.leafletTarget.getDOMNode(), {
+    this.map = new L.Map(this.refs.leafletTarget, {
       layers: [],
       center: new L.LatLng(lat, lng),
       zoom: Math.round(this.props.zoom),
@@ -149,19 +157,26 @@ const MapComponent = React.createClass({
 
     return <div style={EstimatePageStyling}></div>
   },
-  render: function () {
-    let interactionPanel = <div></div>
+  getMapStyling: function () {
     const viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
-
     const mapStyling = {
       left: 0,
       top: 0,
       position: 'absolute',
       overflow: 'hidden',
       zIndex: 2,
-      width: '100%',
+      width: this.halfScreen() ? '50%' : '100%',
       height: viewportHeight - 80,
     }
+
+    return mapStyling
+  },
+  halfScreen: function () {
+    return this.props.activeStep === 'second' || this.props.activeStep === 'fourth'
+  },
+  render: function () {
+    let interactionPanel = <div></div>
+    const viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
 
     const MapFooterStyling = {
       left: 0,
@@ -177,19 +192,13 @@ const MapComponent = React.createClass({
 
     if (this.props.activeStep === 'second') interactionPanel = this.renderFeatureSelector(viewportHeight)
     if (this.props.activeStep === 'fourth') interactionPanel = this.renderEstimatePage(viewportHeight)
-    if (this.props.activeStep === 'second' || this.props.activeStep === 'fourth') {
-      mapStyling.width = '50%'
-      this.map.invalidateSize()
-      const fitToBounds = this.estimateLayer.getBounds()
-      this.map.panTo(fitToBounds.getCenter())
-    }
 
     return (
       <div className='my-container'>
-        <div ref='leafletTarget' id='map' style={mapStyling}>
+        <div ref='leafletTarget' id='map' style={this.getMapStyling()}>
           <MapTools map={this.map}
                     theme={this.props.theme}
-                    mapStyling={mapStyling} />
+                    mapStyling={this.getMapStyling()} />
         </div>
         {interactionPanel}
         <MapFooter map={this.map}

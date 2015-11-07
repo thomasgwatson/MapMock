@@ -3,21 +3,10 @@ var Router = require('react-router')
 var MapComponent = require('./components/MapComponent')
 
 var Route = Router.Route
-var RouteHandler = Router.RouteHandler
 var State = Router.State
 
-var AppHandler = React.createClass({
-  render: function () {
-    return (
-      <div className='heighty'>
-        <RouteHandler />
-      </div>
-    )
-  },
-})
-
 var mapHandler = React.createClass({
-  mixins: [State, Router.Navigation],
+  mixins: [State, Router.History],
   getInitialState: function () {
     return {activeStep: 'first'}
   },
@@ -27,22 +16,19 @@ var mapHandler = React.createClass({
     let seekPosition = true
     let zoom = 13
     let step = 'first'
-
-    if (this.getQuery().lat) lat = this.getQuery().lat; seekPosition = false
-    if (this.getQuery().lng) lng = this.getQuery().lng; seekPosition = false
-    if (this.getQuery().zoom) zoom = Math.round(this.getQuery().zoom)
-    if (this.getQuery().step) step = this.getQuery().step
+    if (this.props.location.query.lat) lat = parseFloat(this.props.location.query.lat).toFixed(8); seekPosition = false
+    if (this.props.location.query.lng) lng = parseFloat(this.props.location.query.lng).toFixed(8); seekPosition = false
+    if (this.props.location.query.zoom) zoom = Math.round(this.props.location.query.zoom)
+    if (this.props.location.query.step) step = this.props.location.query.step
 
     return (
-      <MapComponent transitionTo={this.transitionTo} theme={theme} activeStep={step} lat={lat} lng={lng} zoom={zoom} seekPosition={seekPosition} />
+      <MapComponent transitionTo={this.history.pushState} theme={theme} activeStep={step} lat={lat} lng={lng} zoom={zoom} seekPosition={seekPosition} />
     )
   },
 })
 
 var routes = (
-<Route handler={AppHandler}>
-  <Route name='map-woo' handler={mapHandler} path='/'/>
-</Route>
+  <Route component={mapHandler} path='/' />
 )
 
 module.exports = routes
