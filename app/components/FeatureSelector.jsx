@@ -12,7 +12,7 @@ var FeatureSelector = React.createClass({
       height: this.props.viewportHeight - 80,
       backgroundColor: this.props.theme.secondary,
     }
-
+    console.log(this.props.assetLibrary)
     return <div style={featureSelectorStyling} className='interaction-panel heighty'>
       <div style={{top: 30, position: 'absolute', height: '100%', width: '100%', color: this.props.theme.primary}}>
         <div className='row'>

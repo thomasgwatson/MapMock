@@ -4,6 +4,7 @@ require('leaflet-draw')
 const MapTools = require('./MapTools')
 const MapFooter = require('./MapFooter')
 const FeatureSelector = require('./FeatureSelector')
+const generateAssetLibrary = require('../assetUtils')
 
 const MapComponent = React.createClass({
   getDefaultProps: function () {
@@ -17,7 +18,7 @@ const MapComponent = React.createClass({
   getInitialState: function () {
     return {
       activeStep: 'first',
-      surveryPreferences: [],
+      assetLibrary: generateAssetLibrary(),
     }
   },
   componentWillReceiveProps: function (nextProps) {
@@ -122,7 +123,6 @@ const MapComponent = React.createClass({
     }
   },
   updateURL: function (options) {
-    var getParams = {}
     var getQuery = {
       zoom: options.zoom || Math.round(this.map.getZoom()),
       lat: options.lat || this.map.getCenter().lat,
@@ -130,10 +130,10 @@ const MapComponent = React.createClass({
       step: options.step || this.props.activeStep,
     }
 
-    this.props.transitionTo('/', getParams, getQuery)
+    this.props.transitionTo(null, '/', getQuery)
   },
   renderFeatureSelector: function (viewportHeight) {
-    return <FeatureSelector {...this.props} viewportHeight={viewportHeight} />
+    return <FeatureSelector {...this.props} assetLibrary={this.state.assetLibrary} viewportHeight={viewportHeight} />
   },
   renderEstimatePage: function (viewportHeight) {
     const EstimatePageStyling = {
@@ -150,7 +150,7 @@ const MapComponent = React.createClass({
     return <div style={EstimatePageStyling}></div>
   },
   render: function () {
-    let interactionPanel
+    let interactionPanel = <div></div>
     const viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
 
     const mapStyling = {
