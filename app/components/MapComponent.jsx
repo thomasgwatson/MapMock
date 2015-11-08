@@ -19,7 +19,15 @@ const MapComponent = React.createClass({
     return {
       activeStep: 'first',
       assetLibrary: generateAssetLibrary(),
+      featureState: new Map([['checked', new Set()], ['currentSurvey', 'aerial_20'], ['currentCategory', 'none']]),
     }
+  },
+  selectCategory: function (...args) {
+    console.log(args)
+  },
+  updateCurrentSurvey: function (evt, index, menuItem) {
+    const newFeatureState = this.state.featureState.set('currentSurvey', menuItem.payload)
+    this.setState({featureState: newFeatureState})
   },
   componentWillReceiveProps: function (nextProps) {
     if (nextProps.lat !== this.props.lat || nextProps.lng !== this.props.lng || nextProps.zoom !== this.props.zoom) {
@@ -31,7 +39,7 @@ const MapComponent = React.createClass({
         this.map.invalidateSize()
         const fitToBounds = this.estimateLayer.getBounds()
         this.map.panTo(fitToBounds.getCenter())
-      }, 100)
+      }, 200)
     }
   },
   componentDidMount: function () {
@@ -141,7 +149,13 @@ const MapComponent = React.createClass({
     this.props.transitionTo(null, '/', getQuery)
   },
   renderFeatureSelector: function (viewportHeight) {
-    return <FeatureSelector {...this.props} assetLibrary={this.state.assetLibrary} viewportHeight={viewportHeight} />
+    return <FeatureSelector
+            {...this.props}
+            updateCurrentSurvey={this.updateCurrentSurvey}
+            assetLibrary={this.state.assetLibrary}
+            featureState={this.state.featureState}
+            selectCategory={this.selectCategory}
+            viewportHeight={viewportHeight} />
   },
   renderEstimatePage: function (viewportHeight) {
     const EstimatePageStyling = {

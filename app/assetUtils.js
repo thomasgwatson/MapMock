@@ -2,7 +2,6 @@ const assetsJSON = require('./public/assets/assets')
 
 const generateAssetLibrary = () => {
   const assetLibrary = new Map()
-  assetLibrary.set('checked', new Set()) // To hold the list of desired features
   assetLibrary.set('asset_categories', new Set()) // Track a set of all known categories
   assetLibrary.set('survey_types', new Set()) // Track a set of all known survey_types
 

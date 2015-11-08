@@ -10,6 +10,8 @@ require('./normalize.css')
 require('../node_modules/leaflet/dist/leaflet.css')
 require('../node_modules/leaflet-draw/dist/leaflet.draw.css')
 require('./main.css')
+let injectTapEventPlugin = require('react-tap-event-plugin')
+injectTapEventPlugin()
 
 // routing and friends
 var ReactRouter = require('react-router')
