@@ -4,18 +4,29 @@ const DropDownMenu = require('material-ui/lib/drop-down-menu')
 const Paper = require('material-ui/lib/paper')
 const List = require('material-ui/lib/lists/list')
 const ListItem = require('material-ui/lib/lists/list-item')
+const CheckBox = require('material-ui/lib/checkbox')
 
 var FeatureSelector = React.createClass({
-  test: function () {
-    console.log('yayyaa')
+  featureCheckbox: function (feature) {
+    return <CheckBox
+            iconStyle={{fill: this.props.theme.accent1}}
+            defaultChecked={this.props.parentState.checked.has(feature)}
+            onCheck={this.props.featureCheckToggle.bind(null, feature)}
+            name={feature}
+            value={feature} />
   },
   featureListItem: function (feature) {
     // return ListItem based on feature lookup in the assetLibrary
-    return <ListItem primaryText={feature} />
+    return <ListItem
+            primaryText={feature}
+            key={feature}
+            leftCheckbox={this.featureCheckbox(feature)}
+            style={{lineHeight: 1, fontSize: '12px'}}/>
   },
   categoryList: function (category) {
     return <ListItem
             primaryText={category}
+            key={category}
             onClick={this.props.selectCategory.bind(null, category)}/>
   },
   getCurrentSurveyIndex: function (currentSurvey, surveyOptions) {
@@ -44,19 +55,18 @@ var FeatureSelector = React.createClass({
     for (let category of this.props.assetLibrary.get('asset_categories')) {
       categories.push(category)
     }
-    // console.log(this.props.assetLibrary.get(this.props.featureState.get('currentCategory')), this.props.featureState.get('currentCategory'))
-    // const categoryMembers = [...this.props.assetLibrary.get(this.props.featureState.get('currentCategory'))] || []
+    var currentCategory = this.props.parentState.currentCategory
+    const categoryMembers = [...this.props.assetLibrary.get(currentCategory)] || []
 
-    const categoryMembers = ['yay']
-    console.log(categories, surveyOptions)
     return <div style={featureSelectorStyling} className='interaction-panel heighty'>
       <div style={{top: 30, position: 'absolute', height: '100%', width: '100%', color: this.props.theme.primary}}>
         <div className='row'>
-          <div className='col-xs-4'></div>
+          <div className='col-xs-2'></div>
+          <div className='col-xs-2' style={{color: this.props.theme.accent1, textAlign: 'center', fontFamily: 'roboto'}}>Select Survey Type</div>
           <div className='col-xs-4'>
             <Paper zDepth={2} style={{backgroundColor: this.props.theme.accent1, width: 'auto', textAlign: 'center'}} >
               <DropDownMenu
-                selectedIndex={this.getCurrentSurveyIndex(this.props.featureState.get('currentSurvey'), surveyOptions)}
+                selectedIndex={this.getCurrentSurveyIndex(this.props.parentState.currentSurvey, surveyOptions)}
                 menuItems={surveyOptions}
                 iconStyle={{fill: this.props.theme.secondary}}
                 onChange={this.props.updateCurrentSurvey}
@@ -67,14 +77,14 @@ var FeatureSelector = React.createClass({
         </div>
         <div style={{height: 30}}></div>
         <div style={{height: '70%', width: '100%', position: 'relative', display: 'block'}}>
-          <div className='row'>
+          <div className='row' style={{overflowY: 'scroll', maxHeight: '90%'}}>
             <div className='col-xs-1'></div>
             <div className='col-xs-5'>
               <List subheader='Select Category'>
                 {categories.map((category) => this.categoryList(category))}
               </List>
             </div>
-            <div className='col-xs-6'>
+            <div className='col-xs-5' style={{overflowY: 'auto'}}>
               <List>
                 {categoryMembers.map((feature) => this.featureListItem(feature))}
               </List>
@@ -85,7 +95,7 @@ var FeatureSelector = React.createClass({
           <div className='row'>
             <div className='col-xs-4'></div>
             <div className='col-xs-4' style={{textAlign: 'center'}}>
-              <RaisedButton label='Generate Estimate' backgroundColor={this.props.theme.accent1} onClick={this.test}/>
+              <RaisedButton label='Generate Estimate' backgroundColor={this.props.theme.accent1} onClick={this.props.fourthStep}/>
             </div>
             <div className='col-xs-4'></div>
           </div>

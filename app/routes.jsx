@@ -16,11 +16,16 @@ var mapHandler = React.createClass({
     let seekPosition = true
     let zoom = 13
     let step = 'first'
-    if (this.props.location.query.lat) lat = parseFloat(this.props.location.query.lat).toFixed(8); seekPosition = false
-    if (this.props.location.query.lng) lng = parseFloat(this.props.location.query.lng).toFixed(8); seekPosition = false
+    if (this.props.location.query.lat) {
+      lat = this.props.location.query.lat
+      seekPosition = false
+    }
+    if (this.props.location.query.lng) {
+      lng = this.props.location.query.lng
+      seekPosition = false
+    }
     if (this.props.location.query.zoom) zoom = Math.round(this.props.location.query.zoom)
     if (this.props.location.query.step) step = this.props.location.query.step
-
     return (
       <MapComponent transitionTo={this.history.pushState} theme={theme} activeStep={step} lat={lat} lng={lng} zoom={zoom} seekPosition={seekPosition} />
     )

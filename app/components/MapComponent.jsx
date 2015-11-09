@@ -5,6 +5,7 @@ const MapTools = require('./MapTools')
 const MapFooter = require('./MapFooter')
 const FeatureSelector = require('./FeatureSelector')
 const generateAssetLibrary = require('../assetUtils')
+const Paper = require('material-ui/lib/paper')
 
 const MapComponent = React.createClass({
   getDefaultProps: function () {
@@ -19,22 +20,33 @@ const MapComponent = React.createClass({
     return {
       activeStep: 'first',
       assetLibrary: generateAssetLibrary(),
-      featureState: new Map([['checked', new Set()], ['currentSurvey', 'aerial_20'], ['currentCategory', 'none']]),
+      featureState: new Map([['checked', new Set()], ['currentSurvey', 'aerial_20'], ['currentCategory', 'buildings']]),
+      checked: new Set(),
+      currentSurvey: 'aerial_20',
+      'currentCategory': 'buildings',
     }
   },
+  fourthStep: function () {
+    this.updateStep('fourth')
+  },
+  featureCheckToggle: function (feature, evt) {
+    const checkedSet = this.state.checked
+    if (checkedSet.has(feature)) checkedSet.delete(feature)
+    else checkedSet.add(feature)
+    this.setState({'checked': checkedSet})
+  },
   selectCategory: function (...args) {
-    console.log(args)
+    this.setState({currentCategory: args[0]})
   },
   updateCurrentSurvey: function (evt, index, menuItem) {
-    const newFeatureState = this.state.featureState.set('currentSurvey', menuItem.payload)
-    this.setState({featureState: newFeatureState})
+    this.setState({currentSurvey: menuItem.payload})
   },
   componentWillReceiveProps: function (nextProps) {
     if (nextProps.lat !== this.props.lat || nextProps.lng !== this.props.lng || nextProps.zoom !== this.props.zoom) {
       this.map.setView(new L.LatLng(nextProps.lat, nextProps.lng), nextProps.zoom)
     }
 
-    if (nextProps.activeStep === 'second' || nextProps.activeStep === 'fourth') {
+    if (nextProps.activeStep === 'second' || nextProps.activeStep === 'fourth' && nextProps.activeStep !== this.props.activeStep) {
       setTimeout(() => {
         this.map.invalidateSize()
         const fitToBounds = this.estimateLayer.getBounds()
@@ -74,7 +86,7 @@ const MapComponent = React.createClass({
 
     if ('geolocation' in navigator && this.props.seekPosition) {
       navigator.geolocation.getCurrentPosition((position) => {
-        this.map.setView(new L.LatLng(position.coords.latitude, position.coords.longitude), this.props.zoom)
+        this.updateURL({zoom: this.props.zoom, lat: position.coords.latitude, lng: position.coords.longitude})
       })
     }
 
@@ -102,7 +114,7 @@ const MapComponent = React.createClass({
     this.map.addLayer(this.estimateLayer)
 
     this.map.on('zoomend', this.updateZoom)
-    this.map.on('moveend', this.updateCenter)
+    this.map.on('dragend', this.updateCenter)
     this.map.on('draw:created', this.objectDrawn)
   },
   objectDrawn: function (evt) {
@@ -151,9 +163,11 @@ const MapComponent = React.createClass({
   renderFeatureSelector: function (viewportHeight) {
     return <FeatureSelector
             {...this.props}
+            fourthStep={this.fourthStep}
+            featureCheckToggle={this.featureCheckToggle}
             updateCurrentSurvey={this.updateCurrentSurvey}
             assetLibrary={this.state.assetLibrary}
-            featureState={this.state.featureState}
+            parentState={{...this.state}}
             selectCategory={this.selectCategory}
             viewportHeight={viewportHeight} />
   },
@@ -167,9 +181,15 @@ const MapComponent = React.createClass({
       width: '50%',
       height: viewportHeight - 80,
       backgroundColor: this.props.theme.secondary,
+      color: 'white',
     }
 
-    return <div style={EstimatePageStyling}></div>
+    return <div style={EstimatePageStyling}>
+      <p>{this.state.currentSurvey}</p>
+      <Paper zDepth={2}>
+        <p style={{color: this.props.theme.secondary}}>{this.state.checked}</p>
+      </Paper>
+    </div>
   },
   getMapStyling: function () {
     const viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)

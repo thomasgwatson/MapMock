@@ -7,7 +7,6 @@ const generateAssetLibrary = () => {
 
   const updateAssetCategories = (library, asset) => {
     if (library.has(asset['asset_category'])) { // track all possible categories
-      console.log()
       library.get(asset['asset_category']).add(asset['asset_name'])
     } else {
       library.get('asset_categories').add(asset['asset_category']) // update set of asset categories
@@ -31,7 +30,6 @@ const generateAssetLibrary = () => {
     updateAssetCategories(assetLibrary, asset)
     updateSurveryTypes(assetLibrary, asset)
   }
-
   return assetLibrary
 }
 
